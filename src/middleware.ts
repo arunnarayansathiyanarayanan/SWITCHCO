@@ -27,6 +27,22 @@ export async function middleware(req: NextRequest) {
   return res;
 }
 
+// Include bare paths and nested paths — `:path*` alone often does not match `/route` exactly.
 export const config = {
-  matcher: ["/dashboard/:path*", "/workspace/:path*", "/mentor/:path*", "/portfolio/:path*", "/community/:path*", "/templates/:path*", "/onboarding/:path*"]
+  matcher: [
+    "/dashboard",
+    "/dashboard/:path*",
+    "/workspace",
+    "/workspace/:path*",
+    "/mentor",
+    "/mentor/:path*",
+    "/portfolio",
+    "/portfolio/:path*",
+    "/community",
+    "/community/:path*",
+    "/templates",
+    "/templates/:path*",
+    "/onboarding",
+    "/onboarding/:path*"
+  ]
 };

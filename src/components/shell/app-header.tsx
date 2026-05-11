@@ -9,12 +9,22 @@ export function AppHeader() {
         <Link href="/" className="text-sm font-semibold tracking-wide text-zinc-100">
           AI CAREER OS
         </Link>
-        <nav className="hidden items-center gap-6 text-sm text-zinc-400 md:flex">
-          <Link href="/dashboard">Dashboard</Link>
-          <Link href="/workspace">Builder</Link>
-          <Link href="/mentor">Mentor</Link>
-          <Link href="/community">Community</Link>
-          <Link href="/templates">Templates</Link>
+        <nav className="flex max-w-[55vw] flex-1 flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm text-zinc-400 sm:max-w-none sm:flex-initial sm:justify-start md:gap-6">
+          <Link className="hover:text-zinc-100" href="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="hover:text-zinc-100" href="/workspace">
+            Builder
+          </Link>
+          <Link className="hover:text-zinc-100" href="/mentor">
+            Mentor
+          </Link>
+          <Link className="hover:text-zinc-100" href="/community">
+            Community
+          </Link>
+          <Link className="hover:text-zinc-100" href="/templates">
+            Templates
+          </Link>
         </nav>
         <Link href="/auth">
           <Button size="default">Start transformation</Button>
