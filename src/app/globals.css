@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --muted: #a1a1aa;
+  --card: #111116;
+  --border: #27272a;
+  --brand: #7c3aed;
+  --brand-2: #22d3ee;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: radial-gradient(circle at top right, rgba(124, 58, 237, 0.25), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(34, 211, 238, 0.2), transparent 35%), var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
+}
+
+.glass {
+  background: rgba(17, 17, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
