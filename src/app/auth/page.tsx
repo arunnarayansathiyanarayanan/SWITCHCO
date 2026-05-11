@@ -1,4 +1,4 @@
-import { signInWithEmail, signInWithGoogle, signUpWithEmail } from "@/app/actions/auth";
+import { signInWithEmail, signUpWithEmail } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 
 export default async function AuthPage({
@@ -19,27 +19,24 @@ export default async function AuthPage({
         {error ? (
           <p className="mb-4 rounded-xl border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200">{error}</p>
         ) : null}
-        <form action={signInWithGoogle} className="mb-4">
-          <Button variant="outline" className="w-full">
-            Continue with Google
-          </Button>
-        </form>
-        <div className="mb-4 border-t border-zinc-800" />
-        <form action={signInWithEmail} className="space-y-4">
+        <form className="space-y-4">
           <input name="email" type="email" required placeholder="Email" className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm" />
           <input
             name="password"
             type="password"
             required
-            placeholder="Password"
+            minLength={6}
+            placeholder="Password (min 6 characters)"
             className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 text-sm"
           />
-          <Button className="w-full">Sign in</Button>
-        </form>
-        <form action={signUpWithEmail} className="mt-3">
-          <Button variant="outline" className="w-full">
-            Create account
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button className="w-full sm:flex-1" formAction={signInWithEmail} type="submit">
+              Sign in
+            </Button>
+            <Button className="w-full sm:flex-1" formAction={signUpWithEmail} type="submit" variant="outline">
+              Create account
+            </Button>
+          </div>
         </form>
       </section>
     </div>

@@ -25,15 +25,15 @@ export default function HomePage() {
           <p className="max-w-lg text-zinc-300">
             AI Career OS transforms ambitious professionals into AI operators through weekly building, real automation delivery, and public proof-of-work.
           </p>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Link href="/auth">
               <Button size="lg">
-                Start your AI transformation <ArrowRight className="ml-2 h-4 w-4" />
+                Sign in to start <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link href="/dashboard">
               <Button size="lg" variant="outline">
-                Explore dashboard
+                Go to dashboard
               </Button>
             </Link>
           </div>

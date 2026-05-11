@@ -1,5 +1,6 @@
 "use server";
 
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -36,12 +37,13 @@ function toSlugBase(title: string) {
 async function getUserIdOrRedirect() {
   const supabase = await createServerSupabaseClient();
   const { data } = await supabase.auth.getUser();
-  if (!data.user) redirect("/auth");
+  if (!data.user) {
+    redirect("/auth");
+  }
   return { userId: data.user.id, supabase };
 }
 
-async function generateUniqueProjectSlug(title: string, userId: string) {
-  const { supabase } = await getUserIdOrRedirect();
+async function generateUniqueProjectSlug(supabase: SupabaseClient, userId: string, title: string) {
   const base = `${toSlugBase(title) || "project"}-${userId.slice(0, 8)}`;
   for (let i = 0; i < 20; i += 1) {
     const slug = i === 0 ? base : `${base}-${i + 1}`;
@@ -68,7 +70,7 @@ export async function createProject(formData: FormData) {
   }
 
   const { userId, supabase } = await getUserIdOrRedirect();
-  const slug = await generateUniqueProjectSlug(parsed.data.title, userId);
+  const slug = await generateUniqueProjectSlug(supabase, userId, parsed.data.title);
   const { error } = await supabase.from("projects").insert({
     user_id: userId,
     title: parsed.data.title,
@@ -155,7 +157,7 @@ export async function installTemplate(formData: FormData) {
     redirect(`/templates?error=${encodeURIComponent(templateError?.message ?? "Template not available.")}`);
   }
 
-  const slug = await generateUniqueProjectSlug(template.name, userId);
+  const slug = await generateUniqueProjectSlug(supabase, userId, template.name);
   const templateJson = (template.template_json as Record<string, unknown>) ?? {};
   const toolsUsed = Array.isArray(templateJson.tools)
     ? templateJson.tools.map((tool) => String(tool))

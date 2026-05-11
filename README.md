@@ -55,7 +55,7 @@ Implemented in `src/app/page.tsx`: hero, value proposition, first-15-min workflo
 
 ## 9) Authentication System
 Implemented in `src/app/auth/page.tsx` and `src/app/actions/auth.ts`.
-Supabase email/password complete; Google OAuth can be added with one additional server action.
+Supabase email/password is enabled; Google OAuth is temporarily removed from the UI (can be restored later).
 
 ## 10) Onboarding Flow
 Implemented in `src/app/onboarding/page.tsx` with multi-input capture and `saveOnboardingAndGenerateRoadmap`.

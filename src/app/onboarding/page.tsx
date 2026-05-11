@@ -1,11 +1,24 @@
 import { saveOnboardingAndGenerateRoadmap } from "@/app/actions/onboarding";
 import { Button } from "@/components/ui/button";
 
-export default function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-6 py-12">
       <h1 className="text-3xl font-semibold text-zinc-50">Build your transformation plan</h1>
-      <p className="text-zinc-300">Answer quickly. We use this to generate your personalized AI-native roadmap and first project sprint.</p>
+      <p className="text-zinc-300">
+        Answers are saved to your account and used to generate a personalized roadmap (requires{" "}
+        <code className="rounded bg-zinc-800 px-1 text-xs">OPENAI_API_KEY</code> on the server).
+      </p>
+
+      {error ? (
+        <p className="rounded-xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">{error}</p>
+      ) : null}
 
       <form action={saveOnboardingAndGenerateRoadmap} className="glass space-y-5 rounded-2xl p-6">
         <div className="grid gap-4 md:grid-cols-2">

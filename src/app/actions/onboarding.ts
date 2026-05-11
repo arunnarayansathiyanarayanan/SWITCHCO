@@ -25,12 +25,21 @@ export async function saveOnboardingAndGenerateRoadmap(formData: FormData) {
 
   const supabase = await createServerSupabaseClient();
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) redirect("/auth");
+  if (!userData.user) {
+    redirect("/auth");
+  }
 
-  const roadmap = await generateRoadmap(payload);
+  let roadmap;
+  try {
+    roadmap = await generateRoadmap(payload);
+  } catch (err) {
+    redirect(`/onboarding?error=${encodeURIComponent(err instanceof Error ? err.message : "Roadmap generation failed.")}`);
+  }
 
-  await supabase.from("onboarding_profiles").upsert({
-    user_id: userData.user.id,
+  const userId = userData.user.id;
+
+  const { error: profileError } = await supabase.from("onboarding_profiles").upsert({
+    user_id: userId,
     current_role: payload.currentRole,
     desired_role: payload.desiredRole,
     ai_familiarity: payload.aiFamiliarity,
@@ -38,14 +47,40 @@ export async function saveOnboardingAndGenerateRoadmap(formData: FormData) {
     interests: payload.interests,
     goals: payload.goals
   });
+  if (profileError) {
+    redirect(`/onboarding?error=${encodeURIComponent(profileError.message)}`);
+  }
 
-  await supabase.from("career_roadmaps").upsert({
-    user_id: userData.user.id,
+  const { data: existingRoadmap } = await supabase
+    .from("career_roadmaps")
+    .select("id")
+    .eq("user_id", userId)
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const roadmapPayload = {
     title: roadmap.title,
     mission: roadmap.mission,
     milestones: roadmap.milestones,
-    next_action: roadmap.nextAction
-  });
+    next_action: roadmap.nextAction,
+    updated_at: new Date().toISOString()
+  };
+
+  if (existingRoadmap?.id) {
+    const { error: roadmapError } = await supabase.from("career_roadmaps").update(roadmapPayload).eq("id", existingRoadmap.id);
+    if (roadmapError) {
+      redirect(`/onboarding?error=${encodeURIComponent(roadmapError.message)}`);
+    }
+  } else {
+    const { error: roadmapError } = await supabase.from("career_roadmaps").insert({
+      user_id: userId,
+      ...roadmapPayload
+    });
+    if (roadmapError) {
+      redirect(`/onboarding?error=${encodeURIComponent(roadmapError.message)}`);
+    }
+  }
 
   revalidatePath("/dashboard");
   redirect("/dashboard");

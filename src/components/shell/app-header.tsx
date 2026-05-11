@@ -13,6 +13,9 @@ export function AppHeader() {
           <Link className="hover:text-zinc-100" href="/dashboard">
             Dashboard
           </Link>
+          <Link className="hover:text-zinc-100" href="/onboarding">
+            Onboarding
+          </Link>
           <Link className="hover:text-zinc-100" href="/workspace">
             Builder
           </Link>
@@ -27,7 +30,7 @@ export function AppHeader() {
           </Link>
         </nav>
         <Link href="/auth">
-          <Button size="default">Start transformation</Button>
+          <Button size="default">Sign in</Button>
         </Link>
       </div>
     </header>
